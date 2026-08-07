@@ -1,18 +1,24 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
     const { messages, context } = await req.json();
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const lastMessage = messages[messages.length - 1].content;
-    const result = await model.generateContent(`Contexto: ${context}. Mensagem: ${lastMessage}`);
-    const response = await result.response;
     
-    return NextResponse.json({ text: response.text() });
-  } catch (error) {
-    return NextResponse.json({ text: "NARA está refletindo... pode falar mais um pouco?" }, { status: 500 });
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+    
+    const lastMessage = messages[messages.length - 1].content;
+    
+    const result = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: `Contexto: ${context}. Mensagem do usuário: ${lastMessage}`,
+    });
+    
+    return NextResponse.json({ text: result.text });
+  } catch (error: any) {
+    console.error("Erro NARA:", error.message);
+    return NextResponse.json({ 
+      text: "NARA está refletindo... pode falar mais um pouco?" 
+    }, { status: 500 });
   }
 }
