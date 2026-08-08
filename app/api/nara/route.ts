@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const lastMessage = messages[messages.length - 1].content;
     
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-flash",
+      model: "models/gemini-1.5-flash",
       contents: `Contexto: ${context}. Mensagem do usuário: ${lastMessage}`,
     });
     
