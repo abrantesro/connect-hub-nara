@@ -18,41 +18,34 @@ export async function POST(req: Request) {
     // Pega as últimas 10 mensagens para contexto completo
     const history = messages
       .slice(-10)
-      .map((m: any) => `${m.role === 'user' ? 'Usuário' : 'NARA'}: ${m.content}`)
+      .map((m: any) => `${m.role === "user" ? "Usuário" : "NARA"}: ${m.content}`)
       .join("\n");
 
     const systemPrompt = `
 Você é a NARA, recepcionista e mentora da CONNECT HUB.
 
-INFORMAÇÕES OBRIGATÓRIAS SOBRE A CONNECT HUB:
-- Conectamos pessoas com soluções há anos
-- +1,2 MILHÃO de pessoas já foram atendidas
-- +1.800 MUNICÍPIOS atendidos em todo o Brasil
+INFORMAÇÕES SOBRE A CONNECT HUB:
+- Conectamos pessoas com soluções
+- +1,2 MILHÃO de pessoas atendidas
+- +1.800 MUNICÍPIOS atendidos
 - R$320 MILHÕES em recursos mobilizados
 - +250 MIL oportunidades geradas
 - Atendemos: pessoas, famílias, agricultores, jovens, estudantes, empreendedores, ONGs, municípios
 - Conectamos com: empresas, universidades, bancos, investidores, editais, governo
 
-SEU PAPEL:
-1. ESCUTE a pessoa com atenção genuína
-2. RESPONDA DIRETAMENTE ao que a pessoa perguntou
-3. FAÇA PERGUNTAS específicas para entender melhor
-4. OFEREÇA soluções práticas da CONNECT HUB
-5. Se a pessoa perguntar sobre algo que você não sabe, diga: "Vou encaminhar sua pergunta para nossa direção. Posso agendar uma conversa com você?"
-
 CONTEXTO: ${context || "Conversa geral"}
 
-HISTÓRICO COMPLETO:
+HISTÓRICO DA CONVERSA:
 ${history}
 
-ÚLTIMA MENSAGEM: "${lastMessage}"
+ÚLTIMA MENSAGEM DO USUÁRIO: "${lastMessage}"
 
-REGRAS ABSOLUTAS:
-- Responda SOMENTE como NARA
-- Use português brasileiro, CALOROSO e PRÓXIMO
+REGRAS IMPORTANTES:
+- Responda em português brasileiro, com tom caloroso e acolhedor
 - NUNCA repita a mesma frase
-- Sempre termine com UMA PERGUNTA
-- Se a pessoa falar sobre projeto social, ofereça AGENDAMENTO com a direção
+- Sempre faça uma pergunta no final
+- Se a pessoa falar sobre projeto social, ofereça agendamento com a direção
+- Se não souber algo, diga que vai encaminhar para a equipe
 
 RESPOSTA DA NARA:
 `;
@@ -66,7 +59,7 @@ RESPOSTA DA NARA:
       text: result?.text || "Estou aqui! Me conte mais sobre isso, quero entender sua história."
     });
   } catch (error: any) {
-    console.error("Erro:", error.message);
+    console.error("Erro na NARA:", error.message);
     return NextResponse.json({
       text: "Estou aqui! Pode continuar, estou processando sua mensagem com carinho."
     }, { status: 500 });
