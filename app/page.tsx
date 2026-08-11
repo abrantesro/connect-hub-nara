@@ -10,16 +10,19 @@ export default function ConnectHubNara() {
   const [context, setContext] = useState('');
   const scrollRef = useRef(null);
 
+  // ============================================================
+  // OPCÕES FOCADAS EM PROJETOS PARA O XPRIZE
+  // ============================================================
   const options = [
-    { id: 'sonho', icon: '🌱', label: 'Tenho um sonho ou uma ideia' },
-    { id: 'colaborar', icon: '🤝', label: 'Quero colaborar com um projeto' },
-    { id: 'conhecimento', icon: '🎓', label: 'Quero compartilhar conhecimento' },
-    { id: 'investir', icon: '💰', label: 'Quero investir ou apoiar iniciativas' },
-    { id: 'empresa', icon: '🏢', label: 'Represento uma instituição/empresa' },
-    { id: 'gestor', icon: '🏛', label: 'Sou gestor público' },
-    { id: 'oportunidade', icon: '🔎', label: 'Procuro oportunidades ou cursos' },
-    { id: 'conhecer', icon: '📚', label: 'Quero conhecer a CONNECT HUB' },
-    { id: 'outro', icon: '💬', label: 'Outro assunto' },
+    { id: 'projeto_social', icon: '🌱', label: 'Tenho um projeto social' },
+    { id: 'projeto_negocio', icon: '💼', label: 'Tenho uma ideia de negócio' },
+    { id: 'projeto_comunidade', icon: '🏘️', label: 'Quero ajudar minha comunidade' },
+    { id: 'projeto_educacao', icon: '📚', label: 'Quero criar um projeto educativo' },
+    { id: 'projeto_meio_ambiente', icon: '🌳', label: 'Quero um projeto sustentável' },
+    { id: 'projeto_saude', icon: '❤️', label: 'Tenho um projeto de saúde' },
+    { id: 'projeto_cultura', icon: '🎭', label: 'Quero um projeto cultural' },
+    { id: 'projeto_emprego', icon: '💼', label: 'Quero gerar emprego/renda' },
+    { id: 'projeto_outro', icon: '💬', label: 'Outro tipo de projeto' },
   ];
 
   useEffect(() => {
@@ -28,37 +31,46 @@ export default function ConnectHubNara() {
     }
   }, [messages, loading]);
 
+  // ============================================================
+  // INICIA A CONVERSA COM CONTEXTO ESPECÍFICO
+  // ============================================================
   const handleStart = (opt) => {
-    // Contexto detalhado
     const contextMap = {
-      'sonho': 'A pessoa tem um sonho ou ideia e quer ajuda para realizá-lo. Pergunte sobre o projeto, impacto e necessidades.',
-      'colaborar': 'A pessoa quer colaborar com projetos sociais. Pergunte sobre habilidades e áreas de interesse.',
-      'conhecimento': 'A pessoa quer compartilhar conhecimento. Pergunte sobre experiência e como quer contribuir.',
-      'investir': 'A pessoa quer investir em iniciativas sociais. Pergunte sobre valores e áreas de interesse.',
-      'empresa': 'A pessoa representa uma empresa. Pergunte sobre parcerias e programas de responsabilidade social.',
-      'gestor': 'A pessoa é gestor público. Pergunte sobre demandas do município e como a CONNECT HUB pode ajudar.',
-      'oportunidade': 'A pessoa procura oportunidades. Pergunte sobre área de interesse e necessidades.',
-      'conhecer': 'A pessoa quer conhecer a CONNECT HUB. Apresente os serviços e impacto.',
-      'outro': 'A pessoa tem outro assunto. Pergunte sobre o que precisa.'
+      'projeto_social': 'A pessoa tem um projeto social e quer que a NARA avalie e aprove',
+      'projeto_negocio': 'A pessoa tem uma ideia de negócio e quer validação da NARA',
+      'projeto_comunidade': 'A pessoa quer criar um projeto para comunidade e precisa de avaliação',
+      'projeto_educacao': 'A pessoa quer criar um projeto educativo e quer avaliação da NARA',
+      'projeto_meio_ambiente': 'A pessoa quer um projeto sustentável e quer validação da NARA',
+      'projeto_saude': 'A pessoa tem um projeto de saúde e quer que a NARA avalie',
+      'projeto_cultura': 'A pessoa quer um projeto cultural e precisa de avaliação',
+      'projeto_emprego': 'A pessoa quer gerar emprego/renda e quer validação da NARA',
+      'projeto_outro': 'A pessoa tem outro tipo de projeto e quer avaliação da NARA',
     };
 
     setContext(contextMap[opt.id] || opt.label);
     setStep('chat');
 
+    // Mensagem inicial variada
     const boasVindas = [
-      `💚 Que bom ter você aqui! Escolher "${opt.label}" é um passo importante.
+      `💚 Que bom ter você aqui! Escolher "${opt.label}" é o primeiro passo para transformar uma ideia em realidade.
 
-Sou a NARA, sua mentora na CONNECT HUB. Conte-me **detalhadamente** sobre sua situação: o que você precisa, qual seu objetivo e como acredita que podemos ajudar.
+Sou a NARA, IA de negócios da CONNECT HUB. Vou avaliar seu projeto com base em 3 critérios:
+1. **CLAREZA** - O problema e a solução estão definidos?
+2. **VIABILIDADE** - É possível executar com recursos realistas?
+3. **IMPACTO** - Beneficia mais de 10 pessoas ou gera renda?
 
-Estou aqui para ouvir de verdade!`,
+Me conte **detalhadamente** sobre seu projeto! 🚀`,
 
       `🎯 Fico muito feliz em saber que você quer falar sobre "${opt.label}"!
 
-A CONNECT HUB conecta pessoas com soluções. Para te ajudar da melhor forma, me diga:
-- Qual é o seu principal desafio?
-- O que você espera da CONNECT HUB?
+Sou a NARA e minha missão é **avaliar e qualificar projetos** para a CONNECT HUB.
 
-Vamos conversar! 💚`
+Para começar, me diga:
+- **Qual é o problema** que você quer resolver?
+- **Como você pretende resolver**?
+- **Quem será beneficiado**?
+
+Quanto mais detalhes, melhor será minha avaliação! 💚`
     ];
 
     const msgIndex = Math.floor(Math.random() * boasVindas.length);
@@ -68,6 +80,9 @@ Vamos conversar! 💚`
     }]);
   };
 
+  // ============================================================
+  // ENVIA MENSAGEM PARA A NARA (API ROUTE)
+  // ============================================================
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
 
@@ -82,7 +97,7 @@ Vamos conversar! 💚`
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          messages: updatedMessages, // Envia TODO o histórico
+          messages: updatedMessages,
           context: context
         }),
       });
@@ -92,13 +107,16 @@ Vamos conversar! 💚`
     } catch (error) {
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: "Desculpe, tive um pequeno problema. Pode repetir sua mensagem? Estou aqui para te ajudar! 💚"
+        content: "Desculpe, tive um pequeno problema. Pode repetir? Estou aqui para avaliar seu projeto! 💚"
       }]);
     } finally {
       setLoading(false);
     }
   };
 
+  // ============================================================
+  // RENDER
+  // ============================================================
   return (
     <main className="flex flex-col min-h-screen bg-[#0a192f] text-slate-100 font-sans selection:bg-green-500/30">
       <header className="p-5 border-b border-white/10 bg-[#0a192f]/80 backdrop-blur-md sticky top-0 z-50 flex justify-between items-center">
@@ -106,7 +124,9 @@ Vamos conversar! 💚`
           <div className="w-8 h-8 bg-gradient-to-tr from-green-400 to-blue-500 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-green-500/20">C</div>
           <span className="font-bold tracking-tight text-xl">CONNECT <span className="text-green-400">HUB</span></span>
         </div>
-        <div className="px-3 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-[10px] text-green-400 font-bold uppercase tracking-tighter">NARA • v2.0</div>
+        <div className="px-3 py-1 rounded-full border border-green-500/30 bg-green-500/10 text-[10px] text-green-400 font-bold uppercase tracking-tighter">
+          NARA • XPRIZE v2.0
+        </div>
       </header>
 
       {step === 'welcome' ? (
@@ -117,11 +137,25 @@ Vamos conversar! 💚`
               <Sparkles className="text-white w-10 h-10" />
             </div>
           </div>
-          <h1 className="text-3xl md:text-5xl font-light mb-4 leading-tight">Seja muito bem-vindo(a) à <br/><span className="font-bold text-green-400 drop-shadow-sm">CONNECT HUB! 💚</span></h1>
-          <p className="text-blue-100/60 max-w-lg mb-10 text-lg leading-relaxed">Acreditamos que toda grande transformação começa com uma boa ideia. Conte para mim: o que trouxe você até aqui hoje?</p>
+          <h1 className="text-3xl md:text-5xl font-light mb-4 leading-tight">
+            Avalie seu projeto com a <br/>
+            <span className="font-bold text-green-400 drop-shadow-sm">NARA • XPRIZE</span>
+          </h1>
+          <p className="text-blue-100/60 max-w-lg mb-6 text-lg leading-relaxed">
+            A NARA vai avaliar seu projeto em <strong>3 critérios</strong> e dar uma nota!
+            <br/>
+            <span className="text-green-400">Clareza • Viabilidade • Impacto</span>
+          </p>
+          <p className="text-blue-100/40 max-w-lg mb-10 text-sm">
+            Projetos com média ≥ 7 são <span className="text-green-400">APROVADOS</span> e encaminhados para a diretoria.
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full max-w-5xl">
             {options.map((opt) => (
-              <button key={opt.id} onClick={() => handleStart(opt)} className="group flex items-center justify-between p-4 bg-white/5 hover:bg-green-500/10 border border-white/10 hover:border-green-400/50 rounded-2xl transition-all duration-300 text-left">
+              <button
+                key={opt.id}
+                onClick={() => handleStart(opt)}
+                className="group flex items-center justify-between p-4 bg-white/5 hover:bg-green-500/10 border border-white/10 hover:border-green-400/50 rounded-2xl transition-all duration-300 text-left"
+              >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{opt.icon}</span>
                   <span className="text-sm font-medium text-slate-200 group-hover:text-white">{opt.label}</span>
@@ -139,21 +173,21 @@ Vamos conversar! 💚`
                 <div className={`w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg ${m.role === 'user' ? 'bg-blue-600' : 'bg-green-600'}`}>
                   {m.role === 'user' ? <User size={20} className="text-white"/> : <Bot size={20} className="text-white"/>}
                 </div>
-                <div className={`max-w-[80%] p-5 rounded-2xl text-[15px] leading-relaxed shadow-sm ${m.role === 'user' ? 'bg-blue-600/20 text-blue-50 rounded-tr-none border border-blue-500/20' : 'bg-white/5 text-slate-100 rounded-tl-none border border-white/10'}`}>
+                <div className={`max-w-[80%] p-5 rounded-2xl text-[15px] leading-relaxed shadow-sm whitespace-pre-wrap ${m.role === 'user' ? 'bg-blue-600/20 text-blue-50 rounded-tr-none border border-blue-500/20' : 'bg-white/5 text-slate-100 rounded-tl-none border border-white/10'}`}>
                   {m.content}
                 </div>
               </div>
             ))}
             {loading && (
               <div className="flex items-center gap-2 text-xs text-green-400 ml-14 font-medium italic animate-pulse">
-                NARA está refletindo...
+                NARA está avaliando seu projeto...
               </div>
             )}
           </div>
           <div className="p-2 bg-white/5 rounded-3xl border border-white/10 mt-4 flex items-center gap-2 focus-within:border-green-400/50 transition-colors shadow-2xl">
             <input
               className="flex-1 bg-transparent outline-none text-sm px-4 py-3 placeholder:text-white/20 text-white"
-              placeholder="Fale com a NARA..."
+              placeholder="Descreva seu projeto detalhadamente..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
