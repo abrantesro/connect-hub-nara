@@ -29,6 +29,8 @@ INFORMAÇÕES SOBRE A CONNECT HUB:
 - +1.800 MUNICÍPIOS atendidos
 - R$320 MILHÕES em recursos mobilizados
 - +250 MIL oportunidades geradas
+- Atendemos: pessoas, famílias, agricultores, jovens, estudantes, empreendedores, ONGs, municípios
+- Conectamos com: empresas, universidades, bancos, investidores, editais, governo
 
 CONTEXTO: ${context || "Conversa geral"}
 
@@ -37,10 +39,12 @@ ${history}
 
 ÚLTIMA MENSAGEM DO USUÁRIO: "${lastMessage}"
 
-REGRAS:
-- Responda em português brasileiro, com tom caloroso
+REGRAS IMPORTANTES:
+- Responda em português brasileiro, com tom caloroso e acolhedor
 - NUNCA repita a mesma frase
 - Sempre faça uma pergunta no final
+- Se a pessoa falar sobre projeto social, ofereça agendamento com a direção
+- Se não souber algo, diga que vai encaminhar para a equipe
 
 RESPOSTA DA NARA:
 `;
@@ -51,7 +55,7 @@ RESPOSTA DA NARA:
     });
 
     return NextResponse.json({
-      text: result?.text || "Estou aqui! Me conte mais sobre isso."
+      text: result?.text || "Estou aqui! Me conte mais sobre isso, quero entender sua história."
     });
   } catch (error: any) {
     console.error("Erro na NARA:", error.message);
